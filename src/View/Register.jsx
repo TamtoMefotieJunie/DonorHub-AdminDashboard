@@ -1,81 +1,110 @@
 import React, { useState } from 'react';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import GoogleIcon from '@mui/icons-material/Google';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import * as Yup from "yup"
+import { validationSchema } from '../Utils/RegisterValidation';
 import adminImg from '../assets/images/adminbg1.jpg'
-import logo from '../assets/images/logo5.png'
+import { useFormik } from 'formik';
 import FormInput from '../Components/Inputs/FormInput';
-import Button from '../Components/Button';
+import Button from '../Components/Button/Button';
 
 function Register ({onToggle}) {
+//formik logic
+  const Formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmpassword:"",
+      telephone:""
+    },
+    //validation schema
+    validationSchema,
+
+    //handle submit
+    onSubmit: (values) => {
+      console.log(values);
+    }
+  })
+console.log(Formik.errors)
   return (
     <>
     <div className="flex h-screen w-full items-center justify-center">
-        <div className="flex h-[80%] w-[80%] items-center justify-center ">
+        <div className="flex h-[90%] w-[80%] items-center justify-center ">
           <div className="shadow-2xl shadow-red-200 rounded-lg w-[50%] h-full flex flex-col justify-center">
-            {/* <div className='flex flex-row relative justify-center h-[35%] items-center'>
-              <img
-                alt="Your Company"
-                src={logo}
-                className="h-full mr-10 w-[40%]"
-              />
-              <h2 className='text-2xl text-[#CF3304] absolute right-36 top-20 flex-1 font-bold'>DONORHUB</h2>
-            </div> */}
+           
             <h2 className="text-center text-xl font-bold text-[#54C2B5]">
               CREATE AN ACCOUNT
             </h2>
 
             <div className="w-[80%] justify-center content-center ml-28">
-              <form action="#" method="POST" className="space-y-6 px-4">
+              <form 
+              onSubmit={Formik.handleSubmit}
+              action="#" method="POST" className="space-y-6 px-4">
               <div>
-                    <FormInput
-                      id="name"
-                      name="name"
-                      type="text"
-                      label="Name"
-                      autoComplete="name"
-                     />
+                <FormInput
+                  id="name"
+                  name="name"
+                  value={Formik.values.name}
+                  onChange={Formik.handleChange}
+                  type="text"
+                  label="Name"
+                  autoComplete="name"
+                  />
+                    {Formik.errors.name && <span className="text-[#CF3304] text-sm ">{Formik.errors.name}</span>}
                 </div>
                 <div>
                   <FormInput
-                  id="Email"
+                  value={Formik.values.email}
+                  onChange={Formik.handleChange}
                   label = "Email"
                   type = "Email"
-                  name = "label"
+                  name = "email"
                   autoComplete = "email"
                   />
+                   {Formik.errors.email && <span className="text-[#CF3304] text-sm">{Formik.errors.email}</span>}
+
                 </div>
                 <div>
-                    <FormInput
-                      id="password"
-                      name="password"
-                      type="password"
-                      label="Password"
-                      autoComplete="current-password"
-                     />
+                  <FormInput
+                    value={Formik.values.password}
+                    onChange={Formik.handleChange}
+                    name="password"
+                    type="password"
+                    label="Password"
+                    autoComplete="current-password"
+                    />
+                    {Formik.errors.password && <span className="text-[#CF3304] text-sm">{Formik.errors.password}</span>}
+
                 </div>
                 <div>
-                    <FormInput
-                      id="confirm-password"
-                      name="confirm-password"
-                      type="password"
-                      label="Confirm Password"
-                      autoComplete="current-password"
-                     />
+                  <FormInput
+                   value={Formik.values.confirmpassword}
+                   onChange={Formik.handleChange}
+                    id="confirm-password"
+                    name="confirmpassword"
+                    type="password"
+                    label="Confirm Password"
+                    autoComplete="current-password"
+                    />
+                    {Formik.errors.confirmpassword && <span className="text-[#CF3304] text-sm">{Formik.errors.confirmpassword}</span>}
+
                 </div>
                 <div>
-                    <FormInput
-                      id="telephone"
-                      name="telephone"
-                      type="telephone"
-                      label="Telephone"
-                      autoComplete="telephone"
-                     />
+                  <FormInput
+                   value={Formik.values.telephone}
+                   onChange={Formik.handleChange}
+                    id="telephone"
+                    name="telephone"
+                    type="telephone"
+                    label="Telephone"
+                    autoComplete="telephone"
+                    />
+                    {Formik.errors.telephone && <span className="text-[#CF3304] text-sm">{Formik.errors.telephone}</span>}
+
                 </div>
                 <Button name="Sign Up"/>
               </form>
             </div>
-            <p className="mt-7 mr-15  text-center text-sm text-gray-500">
+            <p className="mt-4 mr-15  text-center text-sm text-gray-500">
                 Already a member?{' '}
                 <a href="#" className="font-semibold leading-6 text-[#54C2B5] hover:text-[#CF3304]"
                 onClick={onToggle}

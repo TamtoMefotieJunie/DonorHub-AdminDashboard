@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProgressBar = ({ value }) => {
+const ProgressBar = ({ value,progress }) => {
     return (
         <div className="w-[60%] bg-gray-100 rounded-lg">
             <progress
@@ -23,7 +23,7 @@ const ProgressBar = ({ value }) => {
                     border-radius: 15px; 
                 }
                 progress::-webkit-progress-value {
-                    background-color: #CF3304;
+                    background-color: ${progress};
                     border-radius: 15px; 
                 }
                

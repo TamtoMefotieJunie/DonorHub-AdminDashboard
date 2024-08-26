@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FormInput({type,name,id,label,placeholder}) {
+function FormInput({type,name,id,label,value,onChange}) {
   return (
     <>
    
@@ -10,6 +10,8 @@ function FormInput({type,name,id,label,placeholder}) {
         <div className="">
             <input
                 id={id}
+                value={value}
+                onChange={onChange}
                 name={name}
                 type={type} 
                 className="block w-[80%] rounded-md py-1 text-gray-900 shadow-sm border border-1 outline-none pl-2"

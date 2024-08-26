@@ -9,6 +9,9 @@ import Technician from './View/Technician';
 import Settings from './View/Settings';
 import Notification from './View/Notification';
 import Statistics from './Components/Charts/Statistics';
+import AuthContainer from './View/LoginSignUp';
+import Donations from './View/Donations';
+import BloodCollection from './View/BloodCollection';
 
 function App() {
   
@@ -24,10 +27,14 @@ function App() {
           <Route path="/Settings" element={<Settings/>} exact={true}/>
           <Route path="/Notification" element={<Notification/>} exact={true}/>
           <Route path='Chart' element={<Statistics/>}/>
+          <Route path='Stock/Donation' element={<Donations/>}/>
+          <Route path='Stock/Donation/Collection' element={<BloodCollection/>}/>
+
         </Route>
         </Routes>
 
       </BrowserRouter>
+      {/* <AuthContainer/> */}
     </>
   )
 }

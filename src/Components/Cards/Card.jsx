@@ -21,7 +21,7 @@ function Cards({icon,value,label,description,increase,stats,statDescription,bg,b
           
             <MoreHoriz/>
         </div>
-        <div className='p-4 mt-1'>
+        <div className='p-4 mt-1 font-semibold h-[60%]'>
            
             <div className='flex  space-y-5 mb-5 space-x-5'>
                 <span className='text-5xl font-bold'>{value}</span>
@@ -32,7 +32,7 @@ function Cards({icon,value,label,description,increase,stats,statDescription,bg,b
             <span className='text-md'>{description}</span>
              
         </div>
-        <div className='flex items-center box-sizing box-content justify-around mb-5 space-x-5'
+        <div className='flex items-center box-sizing box-content justify-around space-x-5'
         style={{marginTop:mt}}>
         {stats}
         
