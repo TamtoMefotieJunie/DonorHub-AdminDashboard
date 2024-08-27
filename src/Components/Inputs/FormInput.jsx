@@ -4,7 +4,7 @@ function FormInput({type,name,id,label,value,onChange}) {
   return (
     <>
    
-        <label htmlFor={id} className="block text-sm font-medium leading-6 text-gray-900">
+        <label htmlFor={id} className="block text-base font-medium leading-6 text-gray-900">
             {label}
         </label>
         <div className="">
@@ -14,7 +14,7 @@ function FormInput({type,name,id,label,value,onChange}) {
                 onChange={onChange}
                 name={name}
                 type={type} 
-                className="block w-[80%] rounded-md py-1 text-gray-900 shadow-sm border border-1 outline-none pl-2"
+                className="block w-[80%] text-base rounded-md py-1 text-gray-900 shadow-sm border border-1 outline-none pl-2"
                    
             />
                 

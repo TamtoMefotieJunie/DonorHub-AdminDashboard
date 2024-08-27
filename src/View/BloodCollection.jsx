@@ -3,20 +3,27 @@ import { VolunteerActivism,Report, ContactPage } from '@mui/icons-material';
 import Navbar from '../Components/Bar/Navbar';
 import Reports from '../Components/Pages/Report';
 import { useNavigate } from "react-router-dom";
-import styled from 'styled-components';
+// import { handleShowAdditionalContent } from './EventHandlers';
 import Contact from '../Components/Pages/Contact';
 import History from '../Components/Pages/History';
+import NewDonation from './NewDonation';
 
 const BloodCollection = () => {
 
 const [activeContent, setActiveContent] = useState('contact');
+const [showAdditionalDonationContent, setShowAdditionalDonationContent] = useState(false);
+
+const handleShowAdditionalContent = () => {
+  setShowAdditionalDonationContent(true);
+  console.log("additional content")
+};
 
   const renderContent = () => {
     switch (activeContent) {
       case 'contact':
         return <Contact/>;
       case 'donation':
-        return <History/>;
+        return showAdditionalDonationContent? <NewDonation/> : <History onClick={() => handleShowAdditionalContent()} />;
       case 'report':
         return <Reports/>;
       default:
@@ -61,5 +68,6 @@ const [activeContent, setActiveContent] = useState('contact');
     </div>
   )
 }
+
 
 export default BloodCollection

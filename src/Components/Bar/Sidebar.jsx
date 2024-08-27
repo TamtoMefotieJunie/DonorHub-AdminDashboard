@@ -1,5 +1,6 @@
 import { Dashboard,Inventory,Equalizer, Logout, Biotech, Settings, WalletOutlined, Padding } from '@mui/icons-material';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import logo from '../../assets/images/logo3.png'
 import React from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 
@@ -8,8 +9,14 @@ function Sidebar(){
    return(
    <>
    <div className="w-1/6 h-full bg-white  box-border rounded-md text-center content-center"> 
-      <h1 className="font-bold text-2xl p-5 text-[#CF3304]">DONORHUB </h1>
-      <br />
+         <div className='flex flex-row self-center p-3 space-x-2 justify-center h-[15%] items-center'>
+            <img
+               alt="Your Company"
+               src={logo}
+               className="h-[87%] rounded-full  w-[55%]"
+            />
+            <h2 className='text-xl text-[#CF3304]  flex-1 font-bold'>DONORHUB</h2>
+         </div>
       <div className='h-[45%] text-gray-500 box-border'>
          <p className='text-left text-sm text-gray-400 ml-5'>MAIN</p>
          <div className="  box-border p-5  ">

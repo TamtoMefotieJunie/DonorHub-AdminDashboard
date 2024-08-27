@@ -9,7 +9,7 @@ const Stock = () => {
 
 let navigate = useNavigate();
 const handleClick = () => {
-  let path = `Stock/Donation`; 
+  let path = `/Donation`; 
     navigate(path);
 }
 
@@ -52,12 +52,12 @@ const handleClick = () => {
         <div className='bg-white rounded-xl mt-2 h-[90%]'>
           <div className='p-2 border-b-gray-300 border flex items-center pr-5 justify-around'>
             <div className=' w-[80%] flex items-center justify-between text-base font-bold text-right'>
-              <span className=''>Group</span>
-              <span>Quantity</span>
-              <span>Collection date</span>
-              <span>QR code</span>
-              <span>Expiration date</span>
-              <span>Status</span>
+              <span className=' text-center  w-[12%]'>Group</span>
+              <span className=' text-center  w-[12%]'>Quantity</span>
+              <span className=' text-center  w-[12%]'>Collection date</span>
+              <span className=' text-center  w-[12%]'>QR code</span>
+              <span className=' text-center  w-[12%]'>Expiration date</span>
+              <span className=' text-center  w-[12%]'>Status</span>
             </div>
             <span className=' w-[10%] text-center font-semibold space-x-2'>Action</span>
           </div>
@@ -86,7 +86,7 @@ const handleClick = () => {
               <button
                 key={pageNumber}
                 onClick={() => paginate(pageNumber)}
-                className={`p-2 bg-gray-200 hover:bg-gray-300 h-11 focus:outline-none ${currentPage === pageNumber ? 'bg-[#CF3304]' : ''}`}
+                className={`p-2 bg-gray-200 hover:bg-gray-300 h-11 focus:outline-none ${currentPage === pageNumber ? 'bg-[#CF3300]' : ''}`}
               >
                 {pageNumber}
               </button>

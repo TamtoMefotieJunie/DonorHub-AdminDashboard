@@ -12,6 +12,7 @@ import Statistics from './Components/Charts/Statistics';
 import AuthContainer from './View/LoginSignUp';
 import Donations from './View/Donations';
 import BloodCollection from './View/BloodCollection';
+import NewDonation from './View/NewDonation';
 
 function App() {
   
@@ -26,10 +27,10 @@ function App() {
           <Route path="/Orders" element={<Orders/>} exact={true} />
           <Route path="/Settings" element={<Settings/>} exact={true}/>
           <Route path="/Notification" element={<Notification/>} exact={true}/>
-          <Route path='Chart' element={<Statistics/>}/>
-          <Route path='Stock/Donation' element={<Donations/>}/>
-          <Route path='Stock/Donation/Collection' element={<BloodCollection/>}/>
-
+          <Route path='/Chart' element={<Statistics/>}/>
+          <Route path='/Donation' element={<Donations/>}/>
+          <Route path='/Collection' element={<BloodCollection/>}/>
+          <Route path='/NewDonation' element={<NewDonation/>}/>
         </Route>
         </Routes>
 

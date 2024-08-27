@@ -6,12 +6,12 @@ const StockCard = ({Group,Quantity,CollectionDate,QRCode,ExpDate,Status,Modify})
     <>
     <div className='p-2 border-b-gray-300 border flex items-center pr-5 justify-around text-center'>
         <div className=' w-[80%] flex items-center justify-between text-base font-semibold text-center '>
-            <span className=''>{Group}</span>
-            <span>{Quantity}</span>
-            <span className='ml-10'>{CollectionDate}</span>
-            <span>{QRCode}</span>
-            <span className=''>{ExpDate}</span>
-            <span className='text-center'>{Status}</span>    
+            <span  className=' text-center  w-[12%]'>{Group}</span>
+            <span  className=' text-center  w-[12%]'>{Quantity}</span>
+            <span  className=' text-center  w-[12%]'>{CollectionDate}</span>
+            <span  className=' text-center  w-[12%]'>{QRCode}</span>
+            <span  className=' text-center  w-[12%]'>{ExpDate}</span>
+            <span  className=' text-center  w-[12%]'>{Status}</span>    
         </div>
             <span className=' w-[7%] space-x-2 '>
                 <EditAttributes style={{width:40,height:40,color:"#54C2B5"}}/>
