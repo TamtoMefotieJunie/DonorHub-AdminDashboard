@@ -57,7 +57,7 @@ function Authentication({onToggle}) {
                   value={Formik.values.email}
                   onChange={Formik.handleChange}
                   label = "Email"
-                  type = "Email"
+                  type = "email"
                   name = "email"
                   autoComplete = "email"
                   />

@@ -13,6 +13,7 @@ import AuthContainer from './View/LoginSignUp';
 import Donations from './View/Donations';
 import BloodCollection from './View/BloodCollection';
 import NewDonation from './View/NewDonation';
+import Hospitals from './View/Hospitals';
 
 function App() {
   
@@ -31,6 +32,7 @@ function App() {
           <Route path='/Donation' element={<Donations/>}/>
           <Route path='/Collection' element={<BloodCollection/>}/>
           <Route path='/NewDonation' element={<NewDonation/>}/>
+          <Route path='/Hospital' element={<Hospitals/>}/>
         </Route>
         </Routes>
 
