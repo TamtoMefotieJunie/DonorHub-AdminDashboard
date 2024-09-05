@@ -5,28 +5,72 @@ import logo from '../assets/images/logo3.png'
 import FormInput from '../Components/Inputs/FormInput';
 import Button from '../Components/Button/Button';
 import { useFormik } from 'formik';
+import { useAuth } from '../Utils/AuthProvider';
+import { useDispatch } from 'react-redux';
+import { json, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
-function Authentication({onToggle}) {
+
+function Authentication({ onToggle }) {
   const [isSignInActive, setIsSignInActive] = useState(false);
+  const { login } = useAuth();
+  // const dispatch = useDispatch(); 
+  const API_URL = "http://localhost:8080"
+  const [isloggedIn, setIsloggedIn] = useState(false);
+  const navigate = useNavigate();
+  const onSubmit = async (values) => {
+    try {
+      // const response = await dispatch(login(values)).unwrap();
+      // login(values);
+      // console.log(response);
+      // if (response.data.role.name = systemAdmin) {
+      //   // login("dummyToken");
+      // navigate("/dashboard");
+      //   console.log("ko");
+      // } else {
 
-  const handleToggleForm = () => {
-    setIsSignInActive(!isSignInActive);
+      // }
+    } catch (error) {
+      console.log(error);
+      // toast.current.show({ severity: 'error', summary: "login failed", detail: "email or password incorrect" })
+    }
+  }
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    Formik.handleSubmit();
+    await onSubmit(Formik.values);
+
+
   };
   const Formik = useFormik({
 
-    validationSchema : Yup.object().shape({
+    validationSchema: Yup.object().shape({
       email: Yup.string()
-                      .required("*"),
+        .required("*"),
       password: Yup.string()
-                .required("*")
-  }),
-    initialValues:{
-    email: "",
-    password: ""
+        .required("*")
+    }),
+    initialValues: {
+      email: "",
+      password: ""
     },
-    
+
     onSubmit: (values) => {
       console.log(values);
+      axios.post(`${API_URL}/user/login`, values)
+        .then(
+          (response) => {
+            console.log(response.data);
+            login(response.data)
+            navigate("/dashboard");
+          }
+        )
+        .catch(
+          (error) => {
+            console.log(error);
+          }
+        )
     }
 
   })
@@ -49,19 +93,19 @@ function Authentication({onToggle}) {
             </h2>
 
             <div className="w-[80%] justify-center content-center ml-28">
-              <form 
-               onSubmit={Formik.handleSubmit}
-              action="#" method="POST" className="space-y-5 px-4">
+              <form
+                onSubmit={handleFormSubmit}
+                action="#" method="POST" className="space-y-5 px-4">
                 <div>
-                <FormInput
-                  value={Formik.values.email}
-                  onChange={Formik.handleChange}
-                  label = "Email"
-                  type = "email"
-                  name = "email"
-                  autoComplete = "email"
+                  <FormInput
+                    value={Formik.values.email}
+                    onChange={Formik.handleChange}
+                    label="Email"
+                    type="email"
+                    name="email"
+                    autoComplete="email"
                   />
-                   {Formik.errors.email && <span className="text-[#CF3304] text-sm">{Formik.errors.email}</span>}
+                  {Formik.errors.email && <span className="text-[#CF3304] text-sm">{Formik.errors.email}</span>}
 
                 </div>
 
@@ -85,32 +129,32 @@ function Authentication({onToggle}) {
                       type="password"
                       autoComplete="current-password"
                       className="block w-[80%] rounded-md py-1.5 text-gray-900 shadow-sm border border-1 outline-none pl-2"
-                     />
+                    />
                     {Formik.errors.password && <span className="text-[#CF3304] text-sm">{Formik.errors.password}</span>}
 
                   </div>
                 </div>
 
-                <Button name="Sign In"/>
+                <Button name="Sign In" />
               </form>
 
-              
+
             </div>
             <p className="mt-5 mr-15  text-center text-sm text-gray-500">
-                Not a member?{' '}
-                <a href="#" className="font-semibold leading-6 text-[#54C2B5] hover:text-[#CF3304]"
+              Not a member?{' '}
+              <a href="#" className="font-semibold leading-6 text-[#54C2B5] hover:text-[#CF3304]"
                 onClick={onToggle}
-                >
-                  Sign Up Here
-                </a>
-              </p>
+              >
+                Sign Up Here
+              </a>
+            </p>
           </div>
           <div className="w-[50%] rounded-lg h-full bg-red-100 flex justify-center items-center">
             <img
-            src={adminImg}
-            
-            className='w-full h-full rounded-lg'
-            alt='login image'
+              src={adminImg}
+
+              className='w-full h-full rounded-lg'
+              alt='login image'
             />
           </div>
         </div>

@@ -120,9 +120,7 @@ const Hospitals = () => {
                   </span>
                 </button>
               </div>
-              <div className="relative pt-2 px-4 flex-auto">
-                <p className='text-[#54C2B5]'>Your information has been submitted successfully!</p>
-              </div>
+              
               <div className="relative p-4 flex-auto">
                     <form className=" rounded shadow-md px-8 pb-5 pt-3 w-full">
                         <label className="block py-2 text-black text-sm font-bold mb-1">

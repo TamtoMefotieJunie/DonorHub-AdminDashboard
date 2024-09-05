@@ -1,11 +1,15 @@
-import { Dashboard,Inventory,Equalizer, Logout, Biotech, Settings, WalletOutlined, Padding, AdminPanelSettings, LocalHospital } from '@mui/icons-material';
-import InventoryIcon from '@mui/icons-material/Inventory';
+import { Dashboard,Inventory,Equalizer, Logout, Biotech, Settings, WalletOutlined, AdminPanelSettings, LocalHospital, VolunteerActivism, Person } from '@mui/icons-material';
+import { userLinks } from '../../Utils/PrivateRoute';
 import logo from '../../assets/images/logo3.png'
-import React from 'react'
-import { Outlet, NavLink } from 'react-router-dom'
+import React,{useState} from 'react'
+import {  NavLink } from 'react-router-dom'
 
 
-function Sidebar(){
+function Sidebar({role}){
+  
+
+   // Find the links corresponding to the user's role
+   const currentLinks = userLinks.find(link => link.key === role)?.links || [];
    return(
    <>
    <div className="w-1/6 h-full bg-white  box-border rounded-md text-center content-center"> 
@@ -17,47 +21,23 @@ function Sidebar(){
             />
             <h2 className='text-xl text-[#CF3304]  flex-1 font-bold'>DONORHUB</h2>
          </div>
-      <div className='h-[53%] text-gray-500 box-border'>
+      <div className='h-[45%] text-gray-500 box-border'>
          <p className='text-left text-sm text-gray-400 ml-5'>MAIN</p>
-         <div className="  box-border p-5  ">
-            <NavLink to="/" >
-               <div className='flex  items-center space-x-6 p-1 '>
-                  <span><Dashboard /></span>
-                  <span className=''>Dashboard</span>
-               </div>
-            </NavLink>
-            <NavLink to="/Stock" >
-               <div className='flex  items-center space-y-4 space-x-6 p-1'>
-                  <span className='mt-4'>
-                  <Inventory/></span>
-                  <span>Inventory</span>
-               </div>
-            </NavLink>
-            <NavLink to="/Orders" >
-               <div className='flex space-y-4  items-center space-x-6 p-1 '>
-                  <span className='mt-4'><WalletOutlined/></span>
-                  <span>Requests</span>
-               </div>
-            </NavLink>
-            <NavLink to="/Hospital"> 
-               <div className='flex space-y-4  items-center space-x-6 p-1'>
-                  <span className='mt-4'> <AdminPanelSettings/> </span>
-               <span>Hospitals</span>
-               </div>
-            </NavLink>
-            
-            <NavLink to="/Technician"> 
-               <div className='flex space-y-4  items-center space-x-6 '>
-                  <span className='mt-4'> <Biotech/> </span>
-               <span>Lab Technicians</span>
-               </div>
-            </NavLink>
+         <div className="  box-border pl-5">
+         {currentLinks.map((link, index) => (
+               <NavLink key={index} to={link.path}>
+                     <div className='flex items-center space-y-4 space-x-6 p-1'>
+                        <span className='mt-4'>{link.icon}</span>
+                        <span>{link.label}</span>
+                     </div>
+               </NavLink>
+            ))}
          </div>
       </div>
-      <div className='h-[5%] text-gray-500  '>
+      <div className='h-[9%] text-gray-500  '>
          <p className='text-left text-sm text-gray-400 ml-5'>DATA VISUALIZATION</p>
          <div className=' space-y-6 box-border p-5 place-content-center '>
-         <NavLink to="/Chart" style={{display:'flex', marginRight:6, Padding:1 }} > 
+         <NavLink to="Chart" style={{display:'flex', marginRight:6, Padding:1 }} > 
             <div className='space-x-6'>
                 <span><Equalizer/></span>
                <span>Statistics</span>
@@ -65,14 +45,11 @@ function Sidebar(){
           </NavLink>
             </div>
       </div>
-
-
-      
-      <div className='h-[35%] place-content-center  '>
+      <div className='h-[34%] place-content-center  '>
          <p className='text-left text-sm text-gray-400 ml-5'>SUPPORT</p>
          <div className='p-4 space-y-4 box-border text-gray-500 '>
             
-             <NavLink to="/Settings" > 
+             <NavLink to="Settings" > 
                <div className='flex space-x-6  items-center p-1 '>
                   <span><Settings/></span>
                   <span>Settings</span>

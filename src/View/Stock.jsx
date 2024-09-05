@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { ChevronLeft, ChevronRight, RequestQuote } from '@mui/icons-material';
 import Navbar from '../Components/Bar/Navbar';
 import { Filter, Filter1Outlined, FilterList, HealthAndSafety } from '@mui/icons-material';
 import StockCard from '../Components/Cards/StockCard';
 import { useNavigate } from "react-router-dom";
+import { useFormik } from 'formik';
+import * as Yup from 'yup'; 
 
 const Stock = () => {
 
@@ -12,6 +14,13 @@ const handleClick = () => {
   let path = `/Donation`; 
     navigate(path);
 }
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [price, setPrice] = useState('');
+const handlePriceSubmit = (e) => {
+  e.preventDefault();
+  console.log(`Set price: ${price}`);//save to database here
+  setIsModalOpen(false); 
+};
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; 
@@ -28,8 +37,25 @@ const handleClick = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = stockData.slice(indexOfFirstItem, indexOfLastItem);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Form validation schema using Yup
+  const validationSchema = Yup.object({
+    price: Yup.number()
+      .typeError('Price must be a number')
+      .positive('Price must be greater than zero')
+      .required('Price is required'),
+  });
+
+  // Formik for form handling
+  const formik = useFormik({
+    initialValues: { price: '' },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(`Set price: ${values.price}`); // Handle your price setting logic here (e.g., save to database)
+      setIsModalOpen(false); // Close modal after submission
+    },
+  });
 
   return (
     <div className='w-full space-y-3 h-full overflow-y-hidden'>
@@ -37,7 +63,49 @@ const handleClick = () => {
       <p className='text-[#54C2B5] font-bold text-2xl'>Our Stock</p>
       <div className='bg-gray-200 rounded-xl p-3 h-[80%]'>
         <div className='flex p-1 items-center justify-between'>
-          <p className='font-bold text-gray-500 text-xl'>Blood Packs</p>
+          <button   onClick={() => setIsModalOpen(true)} className='flex p-2 w-[12%] items-center bg-gradient-to-b from-[#CF3304] to-[#CF3304]/70 color-white text-white justify-around rounded-lg'>
+              <RequestQuote />
+              <p className='text-md font-bold'>Set your Price</p>
+          </button>
+           {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-5 rounded-lg shadow-lg w-1/3">
+            <h2 className="text-xl font-bold mb-4">Set Blood Pack Price</h2>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2">Enter Price:</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formik.values.price}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className={`w-full px-3 py-2 border rounded-lg ${formik.touched.price && formik.errors.price ? 'border-red-500' : ''}`}
+                  placeholder="Enter price"
+                />
+                {formik.touched.price && formik.errors.price ? (
+                  <p className="text-red-500 text-sm">{formik.errors.price}</p>
+                ) : null}
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-gray-300 px-4 py-2 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-[#CF3304] text-white px-4 py-2 rounded-md"
+                >
+                  Set Price
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
           <div className='flex items-center w-[25%] justify-around'>
             <button onClick= {handleClick} className='flex p-2 w-[65%] items-center bg-gradient-to-b from-[#CF3304] to-[#CF3304]/70 color-white text-white justify-around rounded-lg'>
               <HealthAndSafety />
