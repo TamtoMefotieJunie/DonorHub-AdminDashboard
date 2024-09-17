@@ -20,12 +20,8 @@ function Register({ onToggle }) {
       confirmpassword: '',
       telephone: '',
     },
-    //validation schema
     validationSchema,
-
-    //handle submit
     onSubmit: (values) => {
-      // console.log('Errors:', Formik.errors);
       console.log(values);
       apiClient
         .post('/auth/register', { ...values, role: 'patient' })

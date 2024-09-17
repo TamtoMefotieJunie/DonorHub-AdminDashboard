@@ -3,16 +3,31 @@ import { VolunteerActivism,Report, ContactPage } from '@mui/icons-material';
 import Navbar from '../Components/Bar/Navbar';
 import Reports from '../Components/Pages/Report';
 import { useNavigate } from "react-router-dom";
-// import { handleShowAdditionalContent } from './EventHandlers';
+import { useFormik } from 'formik';
+import { useLocation } from 'react-router-dom';
 import Contact from '../Components/Pages/Contact';
 import History from '../Components/Pages/History';
 import NewDonation from './NewDonation';
 
 const BloodCollection = () => {
+  const location = useLocation();
+    const { donorValues } = location.state;  
+    
+    console.log("Retrieved values:", donorValues);
+    const [contactValues, setContactValues] = useState(null);
 
+    const handleContactSubmit = (values) => {
+      setContactValues(values);
+      console.log("Contact values received in BloodCollection:", values);
+    };
+  
+ 
 const [activeContent, setActiveContent] = useState('contact');
 const [showAdditionalDonationContent, setShowAdditionalDonationContent] = useState(false);
-
+const mergedValues = {
+  ...donorValues, 
+  ...contactValues   
+};
 const handleShowAdditionalContent = () => {
   setShowAdditionalDonationContent(true);
   console.log("additional content")
@@ -21,9 +36,9 @@ const handleShowAdditionalContent = () => {
   const renderContent = () => {
     switch (activeContent) {
       case 'contact':
-        return <Contact/>;
+        return <Contact onSubmit={handleContactSubmit}/>;
       case 'donation':
-        return showAdditionalDonationContent? <NewDonation/> : <History onClick={() => handleShowAdditionalContent()} />;
+        return showAdditionalDonationContent? <NewDonation mergedValues={mergedValues}/> : <History onClick={() => handleShowAdditionalContent()} />;
       case 'report':
         return <Reports/>;
       default:

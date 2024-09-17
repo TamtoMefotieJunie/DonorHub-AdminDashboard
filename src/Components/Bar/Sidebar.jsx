@@ -8,7 +8,6 @@ function Sidebar({ role }) {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  // Find the links corresponding to the user's role
   const currentLinks = userLinks.find((link) => link.key === role)?.links || [];
   return (
     <>
@@ -47,7 +46,7 @@ function Sidebar({ role }) {
           <p className="text-left text-sm text-gray-400 ml-5">SUPPORT</p>
           <div className="p-4 space-y-4 box-border text-gray-500 ">
             <NavLink to="Settings">
-              <div className="flex space-x-6  items-center p-1 ">
+              <div className="flex space-x-6 items-center p-1 ">
                 <span>
                   <Settings />
                 </span>
@@ -55,7 +54,7 @@ function Sidebar({ role }) {
               </div>
             </NavLink>
             <button
-              className="flex space-x-6  items-center p-1 "
+              className="flex space-x-6 items-center p-1 "
               onClick={() => {
                 logout();
                 navigate('/');

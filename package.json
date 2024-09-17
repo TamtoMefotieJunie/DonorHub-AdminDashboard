@@ -25,6 +25,7 @@
     "react-router-dom": "^6.26.1",
     "react-ymd-date-select": "^0.3.0",
     "styled-components": "^6.1.12",
+    "sweetalert2": "^11.14.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

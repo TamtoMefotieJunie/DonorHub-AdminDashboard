@@ -53,7 +53,7 @@ function App() {
       { path: 'NewDonation', element: <NewDonation/>, exact: true },
       { path: 'Settings', element: <Settings />, exact: true },
     ],
-    systemAdmin: [
+    Admin: [
       { path: 'Technician', element: <Technician />, exact: true },
       { path: 'Chart', element: <Statistics/>, exact: true },
       { path: 'Settings', element: <Settings />, exact: true },

@@ -6,21 +6,17 @@ import StockCard from '../Components/Cards/StockCard';
 import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; 
+import axios from 'axios';
 
 const Stock = () => {
 
 let navigate = useNavigate();
 const handleClick = () => {
-  let path = `/Donation`; 
+  let path = `/dashboard/Donation`; 
     navigate(path);
 }
 const [isModalOpen, setIsModalOpen] = useState(false);
-const [price, setPrice] = useState('');
-const handlePriceSubmit = (e) => {
-  e.preventDefault();
-  console.log(`Set price: ${price}`);//save to database here
-  setIsModalOpen(false); 
-};
+const [packPrice, setPrice] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; 
@@ -39,21 +35,28 @@ const handlePriceSubmit = (e) => {
   const currentItems = stockData.slice(indexOfFirstItem, indexOfLastItem);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Form validation schema using Yup
   const validationSchema = Yup.object({
-    price: Yup.number()
+    packPrice: Yup.number()
       .typeError('Price must be a number')
       .positive('Price must be greater than zero')
       .required('Price is required'),
   });
 
-  // Formik for form handling
+  const baseURL='http://localhost:8080';
   const formik = useFormik({
-    initialValues: { price: '' },
+    initialValues: { packPrice: '' },
     validationSchema,
-    onSubmit: (values) => {
-      console.log(`Set price: ${values.price}`); // Handle your price setting logic here (e.g., save to database)
-      setIsModalOpen(false); // Close modal after submission
+    onSubmit: async (values) => {
+      console.log(`Set price: ${values.packPrice}`);
+      try {
+        const response = await axios.put(`${baseURL}/banks/update/66e5f897aab03637223f1f5f`,{
+          packPrice:formik.values.packPrice
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+      setIsModalOpen(false); 
     },
   });
 
@@ -76,15 +79,15 @@ const handlePriceSubmit = (e) => {
                 <label className="block text-gray-700 font-bold mb-2">Enter Price:</label>
                 <input
                   type="number"
-                  name="price"
-                  value={formik.values.price}
+                  name="packPrice"
+                  value={formik.values.packPrice}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`w-full px-3 py-2 border rounded-lg ${formik.touched.price && formik.errors.price ? 'border-red-500' : ''}`}
+                  className={`w-full px-3 py-2 border rounded-lg ${formik.touched.packPrice && formik.errors.packPrice ? 'border-red-500' : ''}`}
                   placeholder="Enter price"
                 />
-                {formik.touched.price && formik.errors.price ? (
-                  <p className="text-red-500 text-sm">{formik.errors.price}</p>
+                {formik.touched.packPrice && formik.errors.packPrice ? (
+                  <p className="text-red-500 text-sm">{formik.errors.packPrice}</p>
                 ) : null}
               </div>
               <div className="flex justify-end space-x-3">
