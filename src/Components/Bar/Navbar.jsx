@@ -1,7 +1,6 @@
+import { NotificationsOutlined } from '@mui/icons-material'
 import React from 'react'
-import Input from '../Inputs/FormInput'
 import profile from '../../assets/images/profile.png'
-import { NotificationsOutlined,PersonOutlineOutlined } from '@mui/icons-material'
 import SearchInput from '../Inputs/SearchInput'
 
 

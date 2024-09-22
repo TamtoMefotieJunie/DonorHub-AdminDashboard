@@ -14,7 +14,7 @@ function FormInput({type,name,id,label,value,onChange}) {
                 onChange={onChange}
                 name={name}
                 type={type} 
-                className="block w-[80%] text-base rounded-md py-1 text-gray-900 shadow-sm border border-1 outline-none pl-2"
+                className="block w-full text-base rounded-md py-1 text-gray-900 shadow-sm border border-1 outline-none pl-2"
                    
             />
                 
