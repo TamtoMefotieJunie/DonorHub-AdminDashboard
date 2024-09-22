@@ -18,7 +18,7 @@ function Sidebar({ role }) {
         </div>
         <div className="h-[45%] text-gray-500 box-border">
           <p className="text-left text-sm text-gray-400 ml-5">MAIN</p>
-          <div className="  box-border pl-5">
+          <div className="box-border pl-5">
             {currentLinks.map((link, index) => (
               <NavLink key={index} to={link.path}>
                 <div className="flex items-center space-y-4 space-x-6 p-1">
