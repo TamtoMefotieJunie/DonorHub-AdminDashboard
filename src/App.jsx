@@ -41,8 +41,9 @@ function App() {
     console.log(userState);
   }, [userState]);
 
-  const roleBasedRoutes = {
-    Patient: [
+  const _roleBasedRoutes = {
+    HospitalAdmin: [
+      { path: "dashboard", element: <DashboardRight />, exact: true },
       { path: 'Stock', element: <Stock />, exact: false },
       { path: 'Orders', element: <Orders/>, exact: true },
       { path: 'Technician', element: <Technician />, exact: true },
@@ -54,6 +55,7 @@ function App() {
       { path: 'Settings', element: <Settings />, exact: true },
     ],
     Admin: [
+      { path: "dashboard", element: <DashboardRight />, exact: true },
       { path: 'Technician', element: <Technician />, exact: true },
       { path: 'Chart', element: <Statistics/>, exact: true },
       { path: 'Settings', element: <Settings />, exact: true },
@@ -64,13 +66,7 @@ function App() {
 
   function renderRoutes(){
     let role = userState?.user?.role.name;
-    // switch(role){
-    //   case "Patient":
-    //     return protectedRoutes.map(({element, path, exact}, index) => <Route key={index} element={element} path={path} exact={exact} />)
-    //   default:
-    //     return <></>
-    // }
-    const routes = roleBasedRoutes[role] || [];
+    const routes = _roleBasedRoutes[role] || [];
 
     return routes.map(({ element, path, exact }, index) => (
       <Route key={index} element={element} path={path} exact={exact} />
@@ -82,13 +78,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           {
-             <Route path="/dashboard" element={<Dashboard role={userState?.user?.role.name} />}>
+             <Route path="/" element={<Dashboard role={userState?.user?.role.name} />}>
              <Route index element={<DashboardRight />} /> {/* Default content */}
              {renderRoutes()} {/* Role-based content */}
             </Route>
           }
 
-          <Route path="/" element={<AuthContainer />} />
+          <Route path="/auth" element={<AuthContainer />} />
         </Routes>
       </BrowserRouter>
     </>

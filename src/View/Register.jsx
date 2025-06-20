@@ -24,7 +24,7 @@ function Register({ onToggle }) {
     onSubmit: (values) => {
       console.log(values);
       apiClient
-        .post('/auth/register', { ...values, role: 'patient' })
+        .post('/auth/register', { ...values, role: 'HospitalAdmin' })
         .then((response) => {
           console.log(response.data);
           login(response.data);

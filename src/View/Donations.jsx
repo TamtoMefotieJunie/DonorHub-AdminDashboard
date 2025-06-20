@@ -47,7 +47,7 @@ const Donations = () => {
         setIsSubmitted(true);
         console.log(values)
     
-        let path = `/dashboard/Collection`;
+        let path = `/Collection`;
         console.log(`going to: ${path}`)
         navigate(path, { state: {  donorValues: values } });
     }

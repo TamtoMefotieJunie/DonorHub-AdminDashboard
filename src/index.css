@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.active{
+/* .active{
     @apply text-[#CF3304] font-bold
-}
+} */

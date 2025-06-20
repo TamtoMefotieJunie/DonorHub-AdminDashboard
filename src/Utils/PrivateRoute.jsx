@@ -3,7 +3,7 @@ import { Dashboard as DashboardIcon,Inventory,Equalizer,Biotech, Settings as Set
 
 export const userLinks = [
     {
-        key:"Patient",
+        key:"HospitalAdmin",
         links:[ 
             { path: "dashboard", label: "Dashboard", icon: <DashboardIcon/>, exact: true },
             { path: "Stock",label: "Inventory", icon: <Inventory />, exact: false },
@@ -15,7 +15,7 @@ export const userLinks = [
     {
         key:"Admin",
         links:[ 
-            { path: "dashboard", label: "Dashboard", icon: <DashboardIcon/>, exact: true },
+            { path: "/dashboard", label: "Dashboard", icon: <DashboardIcon/>, exact: true },
             { path: "Hospital",label: "Hospital", icon: <AdminPanelSettings />, exact: false },
             { path: "Patient", label: "Patients", icon: <Person />, exact: false },
             { path: "Donor", label: "Donors", icon: <VolunteerActivism />, exact: false },

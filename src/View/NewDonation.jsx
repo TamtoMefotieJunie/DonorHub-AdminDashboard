@@ -3,6 +3,7 @@ import ContactInput from '../Components/Inputs/FormInput'
 import TertiaryButton from '../Components/Button/TertiaryButton'
 import axios from 'axios';
 import * as Yup from 'yup'
+import Swal from 'sweetalert2';
 import { useFormik } from 'formik';
 
 
@@ -14,6 +15,10 @@ const NewDonation = ({mergedValues}) => {
       const dob = mergedValues.month + "-" + mergedValues.day + "-" + mergedValues.year;
     console.log("date of birth:", dob);
    
+
+    const handleNewDonation = () => {
+        Swal.fire('Added', 'New donation added','success')
+        }
     const baseURL='http://localhost:8080';
     
     const formik = useFormik({
@@ -48,6 +53,7 @@ const NewDonation = ({mergedValues}) => {
                 const expirationDate = collectionDate.toISOString().split('T')[0];
                 const startTime = formik.values.startHour + ":" + formik.values.startMinute + "" + formik.values.startPeriod;
                 const endTime = formik.values.endHour + ":" + formik.values.endMinute + "" + formik.values.endPeriod;
+                const hospitalId = localStorage.getItem('hospitalId')
                 const body = {
                 "pack":{
                     type:formik.values.pack,
@@ -57,7 +63,8 @@ const NewDonation = ({mergedValues}) => {
                     collectionCenter:mergedValues.collectionCenter,
                     status:"Available",
                     startTime:startTime,
-                    endTime:endTime
+                    endTime:endTime,
+                    group:formik.values.bloodGroup
                 },
                 "donor":{
                     name:mergedValues.name,
@@ -70,15 +77,15 @@ const NewDonation = ({mergedValues}) => {
                     nationality:mergedValues.nationality,
                     occupation:mergedValues.occupation,
                     serviceLocation:mergedValues.location,
-                    bloodGroup:mergedValues.bloodGroup,
+                    bloodGroup:formik.values.bloodGroup,
                     role: "66d1b01a13201b49b440af16"
                 }
               }
                 console.log("form values:", body);
                 try {
-                    const response = await axios.post(`${baseURL}/blood/newpack/66df929961d9e133fe8af7b8`, body);
+                    const response = await axios.post(`${baseURL}/blood/newpack/${hospitalId}`, body);
                     console.log(response.data);
-              
+                    handleNewDonation();
                 } catch (error) {
                     console.log(error);
                 }

@@ -6,6 +6,7 @@ import HospitalCard from '../Components/Cards/HospitalCard';
 import Modal from 'react-modal';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import { validationSchema } from '../Utils/RegisterValidation';
 
 
@@ -14,6 +15,9 @@ const Hospitals = () => {
      const [modalIsOpen, setIsOpen] = useState(false);
      const [secondModalIsOpen, setSecondModalIsOpen] = useState(false);
 
+     const handlesave = () => {
+      Swal.fire('created', 'hospital and admin created','success')
+      }
      const closeSecondModal = () => setSecondModalIsOpen(false);
      const handleSubmit = (e) => {
       e.preventDefault();
@@ -69,7 +73,7 @@ const Hospitals = () => {
             adminMatricule: Formik.values.matriculationID,
             adminEmail: Formik.values.email,
             adminPassword: Formik.values.password,
-            role:"66d057cfbacb03d7456af5b4"
+            role:"66d1ae620f6c67314a4f0963"
           }
       }
 
@@ -77,7 +81,7 @@ const Hospitals = () => {
         try {
             const response = await axios.post(`${baseURL}/banks/addHospital`, body);
             console.log(response.data);
-      
+            handlesave();
         } catch (error) {
             console.log(error);
         }

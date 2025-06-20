@@ -7,6 +7,7 @@ import logo from '../assets/images/logo3.png';
 import Button from '../Components/Button/Button';
 import FormInput from '../Components/Inputs/FormInput';
 import { apiClient } from '../Utils';
+import Swal from 'sweetalert2';
 import { useAuth } from '../Utils/AuthProvider';
 
 function Authentication({ onToggle }) {
@@ -14,22 +15,43 @@ function Authentication({ onToggle }) {
   const { login } = useAuth();
   const [isloggedIn, setIsloggedIn] = useState(false);
   const navigate = useNavigate();
+  const handleLogin = () => {
+    Swal.fire({
+      position: "top-center",
+      icon:"success",
+      title: "Login successful!!!",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+  const handleFailure = () => {
+    Swal.fire({
+      position: "top-center",
+      icon:"error",
+      title: "Login Failed!!!",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
   const onSubmit = async (values) => {
     try {
       console.log(values);
       apiClient
-        .post('/auth/login', { ...values, role: 'patient' })
+        .post('/auth/login', { ...values, role: 'HospitalAdmin' })
         .then((response) => {
-          console.log(response.data);
+          console.log(response.data.user.hospital);
+          const adminhospital = response.data.user.hospital
           login(response.data);
-          navigate('/dashboard');
+          localStorage.setItem('hospitalId', adminhospital);
+          navigate('/');
         })
         .catch((error) => {
-          alert('There was an error ->' + error);
+          // alert('There was an error ->' + error);
+          handleFailure(error)
         });
     } catch (error) {
       console.log(error);
-      // toast.current.show({ severity: 'error', summary: "login failed", detail: "email or password incorrect" })
+      
     }
   };
 
@@ -55,6 +77,7 @@ function Authentication({ onToggle }) {
         .then((response) => {
           console.log(response.data);
           login(response.data);
+          handleLogin();
           navigate('/dashboard');
         })
         .catch((error) => {

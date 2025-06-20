@@ -6,14 +6,18 @@ import StockCard from '../Components/Cards/StockCard';
 import { useNavigate } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup'; 
+import Swal from 'sweetalert2'
 import axios from 'axios';
 
 const Stock = () => {
 
 let navigate = useNavigate();
 const handleClick = () => {
-  let path = `/dashboard/Donation`; 
+  let path = `/Donation`; 
     navigate(path);
+}
+const handlesave = () => {
+Swal.fire('Saved', 'the price for your hospital has been saved','success')
 }
 const [isModalOpen, setIsModalOpen] = useState(false);
 const [packPrice, setPrice] = useState('');
@@ -47,12 +51,15 @@ const [packPrice, setPrice] = useState('');
     initialValues: { packPrice: '' },
     validationSchema,
     onSubmit: async (values) => {
+      const hospitalId = localStorage.getItem('hospitalId')
       console.log(`Set price: ${values.packPrice}`);
+      console.log(hospitalId)
       try {
-        const response = await axios.put(`${baseURL}/banks/update/66e5f897aab03637223f1f5f`,{
+        const response = await axios.put(`${baseURL}/banks/update/${hospitalId}`,{
           packPrice:formik.values.packPrice
         });
         console.log(response);
+        handlesave();
       } catch (error) {
         console.log(error);
       }

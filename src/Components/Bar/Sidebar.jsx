@@ -21,10 +21,14 @@ function Sidebar({ role }) {
           <div className="  box-border pl-5">
             {currentLinks.map((link, index) => (
               <NavLink key={index} to={link.path}>
-                <div className="flex items-center space-y-4 space-x-6 p-1">
+                {
+                  ({isActive}) => (
+                    <div className={`${isActive ? "text-[#CF3304] font-bold" : ""} flex items-center space-y-4 space-x-6 p-1`}>
                   <span className="mt-4">{link.icon}</span>
                   <span>{link.label}</span>
                 </div>
+                  )
+                }
               </NavLink>
             ))}
           </div>
@@ -33,12 +37,16 @@ function Sidebar({ role }) {
           <p className="text-left text-sm text-gray-400 ml-5">DATA VISUALIZATION</p>
           <div className=" space-y-6 box-border p-5 place-content-center ">
             <NavLink to="Chart" style={{ display: 'flex', marginRight: 6, Padding: 1 }}>
-              <div className="space-x-6">
-                <span>
-                  <Equalizer />
-                </span>
-                <span>Statistics</span>
-              </div>
+              {
+              ({isActive}) => (
+                <div className={`${isActive ? "text-[#CF3304] font-bold space-x-6" : "space-x-6"}`}>
+                  <span>
+                    <Equalizer />
+                  </span>
+                  <span>Statistics</span>
+                </div>
+              )
+            }
             </NavLink>
           </div>
         </div>
@@ -46,18 +54,22 @@ function Sidebar({ role }) {
           <p className="text-left text-sm text-gray-400 ml-5">SUPPORT</p>
           <div className="p-4 space-y-4 box-border text-gray-500 ">
             <NavLink to="Settings">
-              <div className="flex space-x-6 items-center p-1 ">
-                <span>
-                  <Settings />
-                </span>
-                <span>Settings</span>
-              </div>
+              {
+                ({isActive}) => (
+                <div className={`${isActive ? "text-[#CF3304] font-bold" : ""} flex space-x-6 items-center p-1 `}>
+                  <span>
+                    <Settings />
+                  </span>
+                  <span>Settings</span>
+                </div>
+                )
+              }
             </NavLink>
             <button
               className="flex space-x-6 items-center p-1 "
               onClick={() => {
                 logout();
-                navigate('/');
+                navigate('/auth');
               }}>
               <span>
                 <Logout />
