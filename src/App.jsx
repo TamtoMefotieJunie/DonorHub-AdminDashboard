@@ -13,6 +13,7 @@ import Donations from './View/Donations';
 import BloodCollection from './View/BloodCollection';
 import NewDonation from './View/NewDonation';
 import Hospitals from './View/Hospitals';
+import Donor from './View/Donor';
 import { Provider } from 'react-redux';
 import { useAuth } from './Utils/AuthProvider';
 
@@ -53,6 +54,7 @@ function App() {
       { path: 'Collection', element: <BloodCollection/>, exact: true },
       { path: 'NewDonation', element: <NewDonation/>, exact: true },
       { path: 'Settings', element: <Settings />, exact: true },
+      { path: 'Donor', element: <Donor />, exact: true },
     ],
     Admin: [
       { path: "dashboard", element: <DashboardRight />, exact: true },
