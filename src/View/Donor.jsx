@@ -17,6 +17,7 @@ function Donor() {
 
     const [donors, setDonors] = useState([]);
     const [donorStats, setDonorStats] = useState({});
+    const [checkedDonors, setCheckedDonors] = useState({});
      const baseURL = 'http://localhost:8080';
 
     useEffect(() => {
@@ -85,44 +86,47 @@ function Donor() {
           </div>
           {currentItems.map((item, index) => {
             const stats = donorStats[item._id];
-            const handleCheckClick = () => {
+         
                 if (!stats) {
                     Swal.fire('Loading', 'Prediction still loading. Please wait...', 'info');
                     return;
                 }
 
                 const isSafe = stats?.isSafeToDonate;
-                Swal.fire({
-                    title: isSafe ? '✅ Eligible to Donate' : '❌ Not Eligible to Donate',
-                    html: `
-                        <p><b>Name:</b> ${item.name}</p>
-                        <p><b>Blood Group:</b> ${item.bloodGroup}</p>
-                        <p><b>Total Volume:</b> ${stats.totalVolumeDonated} c.c.</p>
-                        <p><b>Months Since First Donation:</b> ${stats.monthsSinceFirstDonation}</p>
-                        <p><b>Months Since Last Donation:</b> ${stats.monthsSinceLastDonation}</p>
-                        <p><b>Number of Donations:</b> ${stats.numberOfDonations}</p>
-                        <p><b>Recommendation:</b> ${stats.recommendation}</p>
-                        <p><b>Confidence:</b> ${stats.predictionProbability}%</p>
-                    `,
-                    icon: isSafe ? 'success' : 'error',
-                    confirmButtonColor: isSafe ? '#54C2B5' : '#CF3304',
-                    confirmButtonText: 'OK'
-                });
-            };
-
             return (
-                <DonorCard
-                key={index}
-                Name={item.name}
-                Total_Volume={stats?.totalVolumeDonated ?? '...'}
-                MSFD={stats?.monthsSinceFirstDonation ?? '...'}
-                Group={item.bloodGroup}
-                Number_Donations={stats?.numberOfDonations ?? '...'}
-                MSLD={stats?.monthsSinceLastDonation ?? '...'}
-                Recommendation={stats?.recommendation ?? 'Loading...'}
-                Confidence={stats?.predictionProbability ? `${stats.predictionProbability}%` : '...'}
-                onCheckClick={handleCheckClick}
-                />
+                <>
+                    <DonorCard
+                    key={index}
+                    Name={item.name}
+                    Total_Volume={stats?.totalVolumeDonated ?? '...'}
+                    MSFD={stats?.monthsSinceFirstDonation ?? '...'}
+                    Group={item.bloodGroup}
+                    Number_Donations={stats?.numberOfDonations ?? '...'}
+                    MSLD={stats?.monthsSinceLastDonation ?? '...'}
+                    recommendation={checkedDonors[item._id] ? stats?.recommendation : 'Loading...'}
+                    confidence={checkedDonors[item._id]? `${stats?.predictionProbability ?? '...'}%` : '...'}
+
+                    onCheckClick={() => {
+                        setCheckedDonors(prev => ({ ...prev, [item._id]: true }));
+                        Swal.fire({
+                        title: isSafe ? 'Safe to Donate' : ' Not Safe to Donate',
+                        html: `
+                            <p><b>Name:</b> ${item.name}</p>
+                            <p><b>Blood Group:</b> ${item.bloodGroup}</p>
+                            <p><b>Total Volume:</b> ${stats.totalVolumeDonated} c.c.</p>
+                            <p><b>Months Since First Donation:</b> ${stats.monthsSinceFirstDonation}</p>
+                            <p><b>Months Since Last Donation:</b> ${stats.monthsSinceLastDonation}</p>
+                            <p><b>Number of Donations:</b> ${stats.numberOfDonations}</p>
+                            <p><b>Recommendation:</b> ${stats.recommendation}</p>
+                                <p><b>Confidence:</b> ${stats.predictionProbability}%</p>
+                        `,
+                        icon: isSafe ? 'success' : 'error',
+                        confirmButtonColor: isSafe ? '#54C2B5' : '#CF3304',
+                        confirmButtonText: 'OK'
+                        });
+                    }}
+                 />
+                </>
             );
             })}
 
