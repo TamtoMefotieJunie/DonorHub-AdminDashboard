@@ -18,7 +18,8 @@ function Donor() {
     const [donors, setDonors] = useState([]);
     const [donorStats, setDonorStats] = useState({});
     const [checkedDonors, setCheckedDonors] = useState({});
-     const baseURL = 'http://localhost:8080';
+    const [loadingStats, setLoadingStats] = useState({});
+    const baseURL = 'http://localhost:8080';
 
     useEffect(() => {
         const fetchDonors = async () => {
@@ -27,6 +28,14 @@ function Donor() {
             console.log(response.data);
             const donorList = response.data.data;
             setDonors(donorList);
+            
+            // Initialize loading state for each donor
+            const initialLoadingState = {};
+            donorList.forEach(donor => {
+                initialLoadingState[donor._id] = true;
+            });
+            setLoadingStats(initialLoadingState);
+            
             // fetching donor information from donor id
             donorList.forEach(async (donor) => {
                 try {
@@ -38,8 +47,20 @@ function Donor() {
                     ...prev,
                     [donor._id]: statsResponse.data
                 }));
+                
+                // Mark this donor as loaded
+                setLoadingStats(prev => ({
+                    ...prev,
+                    [donor._id]: false
+                }));
+                
                 } catch (err) {
                 console.error("Error fetching donor stats for", donor._id, err);
+                // Mark as loaded even on error
+                setLoadingStats(prev => ({
+                    ...prev,
+                    [donor._id]: false
+                }));
                 }
             });
         } catch (error) {
@@ -61,7 +82,19 @@ function Donor() {
     Swal.fire('Saved', 'the price for your hospital has been saved','success')
     }
 
-   
+    const getDisplayValue = (value, isLoading, fallback = "N/A") => {
+        if (isLoading) return "Loading...";
+        return value !== undefined && value !== null ? value : fallback;
+    };
+
+    const getRecommendationColor = (status) => {
+        switch(status) {
+            case 'safe': return 'text-green-600';
+            case 'unsafe': return 'text-red-600';
+            case 'new_donor': return 'text-blue-600';
+            default: return 'text-gray-600';
+        }
+    };
 
   return (
     <div className='w-full space-y-3 h-full overflow-y-hidden'>
@@ -78,7 +111,7 @@ function Donor() {
               <span className=' text-center  w-[10%]'>Group</span>
               <span className=' text-center  w-[10%]'>Number_Donations</span>
               <span className=' text-center  w-[10%]'>MSLD</span>
-              <span className="w-[10%] text-center font-bold">Recommendation </span>
+              <span className="w-[10%] text-center font-bold">Status</span>
               <span className="text-center w-[10%]">Confidence</span>
       
             </div>
@@ -86,47 +119,83 @@ function Donor() {
           </div>
           {currentItems.map((item, index) => {
             const stats = donorStats[item._id];
-         
-                if (!stats) {
-                    Swal.fire('Loading', 'Prediction still loading. Please wait...', 'info');
-                    return;
-                }
-
-                const isSafe = stats?.isSafeToDonate;
+            const isLoading = loadingStats[item._id];
+            
+            // Extract values with fallbacks
+            const totalVolume = stats?.donationMetrics?.totalVolumeDonated || 0;
+            const msfd = stats?.donationMetrics?.lastDonationMonthsAgo; // Months Since First Donation
+            const numberOfDonations = stats?.donationMetrics?.totalDonations || 0;
+            const msld = stats?.donationMetrics?.lastDonationMonthsAgo; // Months Since Last Donation
+            const status = stats?.status || 'unknown';
+            const confidence = stats?.confidence || 0;
+            
             return (
-                <>
-                    <DonorCard
+                <DonorCard
                     key={index}
                     Name={item.name}
-                    Total_Volume={stats?.totalVolumeDonated ?? '...'}
-                    MSFD={stats?.monthsSinceFirstDonation ?? '...'}
+                    Total_Volume={getDisplayValue(totalVolume, isLoading, "0")}
+                    MSFD={getDisplayValue(msfd, isLoading, "N/A")}
                     Group={item.bloodGroup}
-                    Number_Donations={stats?.numberOfDonations ?? '...'}
-                    MSLD={stats?.monthsSinceLastDonation ?? '...'}
-                    recommendation={checkedDonors[item._id] ? stats?.recommendation : 'Loading...'}
-                    confidence={checkedDonors[item._id]? `${stats?.predictionProbability ?? '...'}%` : '...'}
-
+                    Number_Donations={getDisplayValue(numberOfDonations, isLoading, "0")}
+                    MSLD={getDisplayValue(msld, isLoading, "N/A")}
+                    recommendation={
+                        isLoading 
+                            ? "Loading..." 
+                            : (
+                                <span className={getRecommendationColor(status)}>
+                                    {status === 'safe' ? '✅ Safe' : 
+                                     status === 'unsafe' ? '❌ Unsafe' : 
+                                     status === 'new_donor' ? '🆕 New Donor' : 
+                                     'Unknown'}
+                                </span>
+                            )
+                    }
+                    confidence={getDisplayValue(`${confidence.toFixed(1)}%`, isLoading, "0%")}
+                    loading={isLoading}
+        
                     onCheckClick={() => {
+                        if (isLoading) {
+                            Swal.fire('Loading', 'Prediction still loading. Please wait...', 'info');
+                            return;
+                        }
+                        
+                        if (!stats) {
+                            Swal.fire('Error', 'No data available for this donor', 'error');
+                            return;
+                        }
+
                         setCheckedDonors(prev => ({ ...prev, [item._id]: true }));
+                        
+                        const isSafe = stats.status === 'safe';
+                        
                         Swal.fire({
-                        title: isSafe ? 'Safe to Donate' : ' Not Safe to Donate',
-                        html: `
-                            <p><b>Name:</b> ${item.name}</p>
-                            <p><b>Blood Group:</b> ${item.bloodGroup}</p>
-                            <p><b>Total Volume:</b> ${stats.totalVolumeDonated} c.c.</p>
-                            <p><b>Months Since First Donation:</b> ${stats.monthsSinceFirstDonation}</p>
-                            <p><b>Months Since Last Donation:</b> ${stats.monthsSinceLastDonation}</p>
-                            <p><b>Number of Donations:</b> ${stats.numberOfDonations}</p>
-                            <p><b>Recommendation:</b> ${stats.recommendation}</p>
-                                <p><b>Confidence:</b> ${stats.predictionProbability}%</p>
-                        `,
-                        icon: isSafe ? 'success' : 'error',
-                        confirmButtonColor: isSafe ? '#54C2B5' : '#CF3304',
-                        confirmButtonText: 'OK'
+                            title: isSafe ? 'Safe to Donate' : stats.status === 'new_donor' ? 'New Donor' : 'Not Safe to Donate',
+                            html: `
+                                <div class="text-left">
+                                    <p class="mb-2"><b>Name:</b> ${item.name}</p>
+                                    <p class="mb-2"><b>Blood Group:</b> ${item.bloodGroup}</p>
+                                    <p class="mb-2"><b>Status:</b> ${stats.status}</p>
+                                    <p class="mb-2"><b>Confidence:</b> ${stats.confidence?.toFixed(1) || 0}%</p>
+                                    ${stats.donationMetrics ? `
+                                        <p class="mb-2"><b>Total Donations:</b> ${stats.donationMetrics.totalDonations || 0}</p>
+                                        <p class="mb-2"><b>Total Volume Donated:</b> ${stats.donationMetrics.totalVolumeDonated || 0} c.c.</p>
+                                        <p class="mb-2"><b>Last Donation:</b> ${stats.donationMetrics.lastDonationMonthsAgo || 0} months ago</p>
+                                        <p class="mb-2"><b>Donation Rate:</b> ${stats.donationMetrics.donationRate?.toFixed(2) || 0} donations/month</p>
+                                        <p class="mb-2"><b>Average Volume:</b> ${stats.donationMetrics.averageVolume?.toFixed(2) || 0} c.c./donation</p>
+                                    ` : ''}
+                                    <p class="mb-2"><b>Recommendation:</b> ${stats.recommendation || 'No recommendation available'}</p>
+                                    ${stats.decisionFactors?.length ? 
+                                        `<p class="mb-2"><b>Decision Factors:</b><br>${stats.decisionFactors.map(factor => `• ${factor}`).join('<br>')}</p>` : ''}
+                                    <p class="mb-2"><b>Meets Basic Requirement (3+ months since last donation):</b> ${stats.meetsBasicRequirement ? '✅ Yes' : '❌ No'}</p>
+                                </div>
+                            `,
+                            icon: isSafe ? 'success' : stats.status === 'new_donor' ? 'info' : 'error',
+                            confirmButtonColor: isSafe ? '#54C2B5' : stats.status === 'new_donor' ? '#3085d6' : '#CF3304',
+                            confirmButtonText: 'OK',
+                            width: '600px'
                         });
                     }}
                  />
-                </>
             );
             })}
 

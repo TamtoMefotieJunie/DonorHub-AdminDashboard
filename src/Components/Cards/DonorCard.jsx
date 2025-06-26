@@ -2,7 +2,7 @@ import React from 'react'
 import { CheckCircle, Delete, EditAttributes, QrCode } from '@mui/icons-material'
 
 
-const DonorCard =({Name,Total_Volume,MSFD,Group,Number_Donations,MSLD,recommendation,confidence,onCheckClick,}) => {
+const DonorCard =({Name,Total_Volume,MSFD,Group,Number_Donations,MSLD,recommendation,confidence,onCheckClick,loading = false}) => {
   const handleCheck = () => {
     onCheckClick();
   };

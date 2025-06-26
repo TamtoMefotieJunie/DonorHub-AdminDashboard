@@ -70,7 +70,7 @@ const NewDonation = ({mergedValues}) => {
                     name:mergedValues.name,
                     Dob:dob,
                     gender:mergedValues.gender,
-                    email:formik.values.email,
+                    email:mergedValues.email,
                     address:mergedValues.address,
                     telephone:mergedValues.tel,
                     city:mergedValues.city,
